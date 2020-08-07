@@ -1,0 +1,5 @@
+name: 'Barcode Scanner'
+type: module
+description: 'Barcode Scanner integrated with barcodelookup.com.'
+core: 8.x
+package: 'Custom'

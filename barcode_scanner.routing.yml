@@ -1,0 +1,14 @@
+barcode_scanner.scan_form:
+  path: '/barcode_scanner/form/scan'
+  defaults:
+    _form: '\Drupal\barcode_scanner\Form\ScanForm'
+    _title: 'ScanForm'
+  requirements:
+    _access: 'TRUE'
+barcode_scanner.lookup_form:
+  path: '/scan'
+  defaults:
+    _form: '\Drupal\barcode_scanner\Form\LookupForm'
+    _title: 'LookupForm'
+  requirements:
+    _access: 'TRUE'

@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains barcode_scanner.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function barcode_scanner_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the barcode_scanner module.
+    case 'help.page.barcode_scanner':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Barcode Scanner integrated with barcodelookup.com.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function barcode_scanner_theme() {
+  return [
+    'barcode_scanner' => [
+      'render element' => 'children',
+    ],
+  ];
+}
