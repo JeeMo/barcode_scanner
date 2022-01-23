@@ -1,0 +1,11 @@
+{
+  "name": "jeemo/barcode_scanner",
+  "description": "Barcode Scanner: Integrated by default with barcodelookup.com.",
+  "autoload": {
+    "psr-4": {
+      "JeeMo\\BarcodeScanner\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
