@@ -1,5 +1,6 @@
 {
   "name": "jeemo/barcode_scanner",
+  "type": "drupal-module",
   "description": "Barcode Scanner: Integrated by default with barcodelookup.com.",
   "autoload": {
     "psr-4": {
