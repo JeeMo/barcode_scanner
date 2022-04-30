@@ -1,0 +1,20 @@
+# Define default links for this module.
+
+barcode_scanner.lookup_form:
+  title: Barcode Scanner
+  description: Accepts typed or scanned barcode and returns information about that barcode.
+  route_name: barcode_scanner.lookup_form
+  menu_name: 'main'
+  weight: 1
+barcode_scanner.scan_form:
+  title: Simple barcode input form.
+  description: Starting duplicate of lookup_form
+  route_name: barcode_scanner.scan_form
+  menu_name: 'main'
+  weight: 2
+barcode_scanner.ajax_addremoveitem:
+  title: "Examples form: Add-more and remove buttons"
+  description: Not working yet.
+  route_name: barcode_scanner.ajax_addremoveitem
+  menu_name: 'main'
+  weight: 3

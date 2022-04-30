@@ -12,3 +12,10 @@ barcode_scanner.lookup_form:
     _title: 'LookupForm'
   requirements:
     _access: 'TRUE'
+barcode_scanner.ajax_addremoveitem:
+  path: '/examples/form-api-example/ajaxaddremoveelements'
+  defaults:
+    _form:  '\Drupal\form_api_example\Form\AjaxAddRemoveElements'
+    _title: 'AJAX add and remove elements'
+  requirements:
+    _permission: 'access content'
