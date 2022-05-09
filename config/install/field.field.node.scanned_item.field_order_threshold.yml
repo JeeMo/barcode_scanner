@@ -1,0 +1,25 @@
+uuid: ff9c9bb6-155c-47e9-ba35-bd90275b1ca7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_order_threshold
+    - node.type.scanned_item
+id: node.scanned_item.field_order_threshold
+field_name: field_order_threshold
+entity_type: node
+bundle: scanned_item
+label: 'Order Threshold'
+description: 'When do you want to purchase more?'
+required: true
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

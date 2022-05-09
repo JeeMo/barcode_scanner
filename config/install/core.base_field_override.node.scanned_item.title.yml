@@ -1,0 +1,18 @@
+uuid: fb9b3ee2-7dff-4313-99aa-23ae44ef8406
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.scanned_item
+id: node.scanned_item.title
+field_name: title
+entity_type: node
+bundle: scanned_item
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -56,17 +56,25 @@ class LookupForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     //Check for barcode in content.
     $barcode = $form_state->getValue('barcode');
-    $str = "";
+    // Load the current user.
+    $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+    $uid= $user->get('uid')->value;
+
     //If found, display and ask whether to add or subtract 1 from quantity.
     $entities = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
       'type' => 'scanned_item',
       'field_barcode' => $barcode,
+      'uid' => $uid,
       ]);
     if ($entities) {
-      // Found in our system.
-      $str .= "Found in our system.  Add or Subtract?  Also offer option to edit item fields.";
+      $entity = array_shift($entities);
+
+      $url = \Drupal\Core\Url::fromRoute('entity.node.edit_form', ['node' => $entity->id()]);
+      return $form_state->setRedirectUrl($url);
     } else {
-      $str .= "Not found in local system, checking API.";
+      $str = "Not found in local system, checking API.";
+      \Drupal::messenger()->addMessage($str);
+
       //If not found, check barcodelookup.com
       $data = $this->get_data($barcode);
 
@@ -74,11 +82,12 @@ class LookupForm extends FormBase {
       $response = array();
       $response = json_decode($data);
       if ($response) {
-        $str .= '<strong>Barcode Number:</strong> ' . $response->products[0]->barcode_number . '<br><br>';
+        $str = '<strong>Barcode Number:</strong> ' . $response->products[0]->barcode_number . '<br><br>';
         $str .=  '<strong>Title:</strong> ' . $response->products[0]->title . '<br><br>';
         $str .= '<strong>Entire Response:</strong><pre>';
         $str .= print_r($response->products, TRUE);
         $str .= '</pre>';
+        \Drupal::messenger()->addMessage($str);
 
         // For now, automatically add it.
         $node = \Drupal::entityTypeManager()->getStorage('node')->create([
@@ -89,24 +98,16 @@ class LookupForm extends FormBase {
         ]);
         //$node->save();
         /* TODO: Don't save it yet, offer choices.*/
+        if ($node->save()) {
+          $str = "Saved to system.";
+          \Drupal::messenger()->addMessage($str);
+        }
       } else {
         //If not found, redirect to 'add content of type item' form.
-        $str .= "Nothing found by API";
+        $str = "Nothing found by API";
+        \Drupal::messenger()->addMessage($str);
       }
     }
-
-
-
-    // Display result.
-    /*
-    foreach ($form_state->getValues() as $key => $value) {
-      \Drupal::messenger()->addMessage($key . ': ' . ($key === 'text_format'?$value['value']:$value));
-    }
-*/
-
-
-    \Drupal::messenger()->addMessage($str);
-
   }
 
   public function get_data($barcode) {

@@ -1,0 +1,19 @@
+uuid: 3c6b1423-7b03-4b17-948f-4648a2cf4bff
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_barcode
+    - node.type.scanned_item
+id: node.scanned_item.field_barcode
+field_name: field_barcode
+entity_type: node
+bundle: scanned_item
+label: Barcode
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

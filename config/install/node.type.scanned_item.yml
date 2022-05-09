@@ -1,0 +1,17 @@
+uuid: ee39276d-94d6-4b43-998d-b68efad887c7
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Scanned Item'
+type: scanned_item
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true
