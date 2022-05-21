@@ -1,15 +1,24 @@
-uuid: 0d401f33-5cbc-4ccf-baf0-fb007ac1d884
+uuid: 5a7aac7a-3c71-4fd6-8fa8-a24da7b638ff
 langcode: en
 status: true
 dependencies:
   config:
     - field.field.node.scanned_item.body
     - field.field.node.scanned_item.field_barcode
-    - field.field.node.scanned_item.field_in_stock
-    - field.field.node.scanned_item.field_order_threshold
+    - field.field.node.scanned_item.field_brand
+    - field.field.node.scanned_item.field_category
+    - field.field.node.scanned_item.field_generic_product
+    - field.field.node.scanned_item.field_height
+    - field.field.node.scanned_item.field_length
+    - field.field.node.scanned_item.field_product_image
+    - field.field.node.scanned_item.field_quantity_in_stock
+    - field.field.node.scanned_item.field_size
+    - field.field.node.scanned_item.field_weight
+    - field.field.node.scanned_item.field_width
+    - image.style.thumbnail
     - node.type.scanned_item
   module:
-    - path
+    - image
     - text
 id: node.scanned_item.default
 targetEntityType: node
@@ -18,7 +27,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 121
+    weight: 12
     region: content
     settings:
       rows: 9
@@ -26,72 +35,25 @@ content:
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-  created:
-    type: datetime_timestamp
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_barcode:
     type: string_textfield
-    weight: 122
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_in_stock:
-    type: number
-    weight: 123
-    region: content
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
-  field_order_threshold:
-    type: number
-    weight: 124
-    region: content
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
-  path:
-    type: path
-    weight: 30
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  promote:
-    type: boolean_checkbox
-    weight: 15
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    weight: 120
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  sticky:
-    type: boolean_checkbox
-    weight: 16
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  title:
-    type: string_textfield
-    weight: -5
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
     weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_brand:
+    type: string_textfield
+    weight: 11
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_category:
+    type: entity_reference_autocomplete
+    weight: 3
     region: content
     settings:
       match_operator: CONTAINS
@@ -99,4 +61,83 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+  field_generic_product:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_height:
+    type: string_textfield
+    weight: 8
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_length:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_product_image:
+    type: image_image
+    weight: 4
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_quantity_in_stock:
+    type: number
+    weight: 0
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_size:
+    type: string_textfield
+    weight: 6
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_weight:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_width:
+    type: string_textfield
+    weight: 9
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

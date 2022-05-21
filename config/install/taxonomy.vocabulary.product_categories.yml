@@ -1,0 +1,8 @@
+uuid: 9899da84-840b-4c9d-9b1f-76aa77f44c3c
+langcode: en
+status: true
+dependencies: {  }
+name: 'Product Categories'
+vid: product_categories
+description: 'Group scanned items into categories.'
+weight: 0

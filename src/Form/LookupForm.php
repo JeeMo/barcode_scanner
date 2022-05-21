@@ -2,13 +2,18 @@
 
 namespace Drupal\barcode_scanner\Form;
 
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\FileRepositoryInterface;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Class LookupForm.
  */
 class LookupForm extends FormBase {
+
+  public const VID = 'product_categories';
 
   /**
    * {@inheritdoc}
@@ -81,35 +86,119 @@ class LookupForm extends FormBase {
       //If found, display API results and ask whether to add to inventory.
       $response = array();
       $response = json_decode($data);
+
+      $product = $response->products[0];
+
       if ($response) {
-        $str = '<strong>Barcode Number:</strong> ' . $response->products[0]->barcode_number . '<br><br>';
-        $str .=  '<strong>Title:</strong> ' . $response->products[0]->title . '<br><br>';
-        $str .= '<strong>Entire Response:</strong><pre>';
-        $str .= print_r($response->products, TRUE);
-        $str .= '</pre>';
-        \Drupal::messenger()->addMessage($str);
+        // Prep CATEGORIES
+        $category = $this->save_categories($product->category);
+
+        // Prep IMAGES
+        $ext = $this->get_image_ext($product->images[0]);
+        $data = file_get_contents($product->images[0]);
+        $fileRepository = \Drupal::service('file.repository');
+        $file = $fileRepository->writeData($data, 'public://'. $barcode . '.' . $ext, FileSystemInterface::EXISTS_REPLACE);
 
         // For now, automatically add it.
         $node = \Drupal::entityTypeManager()->getStorage('node')->create([
           'type' => 'scanned_item',
-          'title' => $response->products[0]->title,
-          'field_barcode' => $response->products[0]->barcode_number,
-          'body' => $response->products[0]->description,
+          'title' => $product->title,
+          'field_barcode' => $product->barcode_number,
+          'body' => $product->description,
+          'field_size' => $product->size,
+          'field_weight' => $product->weight,
+          'field_length' => $product->length,
+          'field_height' => $product->height,
+          'field_width' => $product->width,
+          'field_brand' => $product->brand,
+          'field_category' => $category,
+          'field_product_image' => [
+            'target_id' => $file->id(),
+            'alt'       => $product->description,
+            'title'     => $product->brand,
+          ],
+
         ]);
-        //$node->save();
-        /* TODO: Don't save it yet, offer choices.*/
+
         if ($node->save()) {
-          $str = "Saved to system.";
-          \Drupal::messenger()->addMessage($str);
+          $url = \Drupal\Core\Url::fromRoute('entity.node.edit_form', ['node' => $node->id()]);
         }
       } else {
         //If not found, redirect to 'add content of type item' form.
-        $str = "Nothing found by API";
-        \Drupal::messenger()->addMessage($str);
+        $url = \Drupal\Core\Url::fromRoute('entity.node.add_form');
       }
     }
+    return $form_state->setRedirectUrl($url);
   }
 
+  /**
+   * Return the filename extension from an image URL.
+   *
+   * @param $str
+   * @return string|null
+   */
+  public function get_image_ext($str) {
+    $tokens = explode("/", $str);
+    $filename = array_pop($tokens);
+    $tokens = explode(".", $filename);
+    return array_pop($tokens);
+  }
+
+  /**
+   * Break these out and set them up.
+   *
+   * @param $categories
+   *
+   * @return \Drupal\Core\Entity\ContentEntityBase|\Drupal\Core\Entity\EntityBase|\Drupal\Core\Entity\EntityInterface|Term|mixed|null
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function save_categories($categories) {
+    $tokens = explode(' > ', $categories);
+    $parent = NULL;
+    foreach ($tokens as $tag) {
+      //Check if tag already exists
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['name' => $tag, 'vid' => static::VID]);
+      $count = count($terms);
+      if ($count > 1) {
+        //Categories should be unique.
+        $this->logger('barcode_scanner')->alert(t('Duplicate terms for: "%tag"', ['%tag' => $tag]));
+        $current_taxonomy_term = array_shift($terms);
+        //TODO: Check if the remaining terms have any products attached.
+        //IF so, remove the remaining term from the product and replace with $current_taxonomy_term
+        //Delete the duplicate terms.
+      } else {
+        if ($count == 0) {
+          //If does not exist, Create new tag with correct previous tag as parent.
+          $new_term = Term::create([
+            'vid' => static::VID,
+            'name' => $tag,
+            'parent' => $parent ?? NULL,
+          ]);
+
+          $new_term->enforceIsNew();
+          $new_term->save();
+          $current_taxonomy_term = $new_term;
+        } else {
+          $current_taxonomy_term = array_shift($terms);
+        }
+      }
+      //Save Parent for next term.
+      $parent = $current_taxonomy_term;
+    }
+    // Return the final tag in the list to assign to the product.
+    return $current_taxonomy_term;
+  }
+
+
+  /**
+   * Use cURL to pull data from barcodelookup.com API.
+   *
+   * @param $barcode
+   * @return bool|string
+   */
   public function get_data($barcode) {
 
     $api_key = 'dioqrp8uxkc4scvz1n1isb4ixlp59c';

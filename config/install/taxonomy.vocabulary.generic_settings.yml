@@ -1,0 +1,8 @@
+uuid: ca81f372-af3e-4708-acd9-9428679abbfd
+langcode: en
+status: true
+dependencies: {  }
+name: 'Generic Settings'
+vid: generic_settings
+description: 'Barcode Scanner: stock threshold settings'
+weight: 0

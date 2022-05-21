@@ -1,14 +1,23 @@
-uuid: 4ff037a8-5a0e-48a2-a069-80945b031088
+uuid: 7574cc77-2435-48ac-aaee-20912dbfdb09
 langcode: en
 status: true
 dependencies:
   config:
     - field.field.node.scanned_item.body
     - field.field.node.scanned_item.field_barcode
-    - field.field.node.scanned_item.field_in_stock
-    - field.field.node.scanned_item.field_order_threshold
+    - field.field.node.scanned_item.field_brand
+    - field.field.node.scanned_item.field_category
+    - field.field.node.scanned_item.field_generic_product
+    - field.field.node.scanned_item.field_height
+    - field.field.node.scanned_item.field_length
+    - field.field.node.scanned_item.field_product_image
+    - field.field.node.scanned_item.field_quantity_in_stock
+    - field.field.node.scanned_item.field_size
+    - field.field.node.scanned_item.field_weight
+    - field.field.node.scanned_item.field_width
     - node.type.scanned_item
   module:
+    - image
     - text
     - user
 id: node.scanned_item.default
@@ -21,7 +30,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 101
+    weight: 11
     region: content
   field_barcode:
     type: string
@@ -29,29 +38,94 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 102
+    weight: 4
     region: content
-  field_in_stock:
+  field_brand:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_category:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_generic_product:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: stock_values
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_height:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_length:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_product_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_quantity_in_stock:
     type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 103
+    weight: 1
     region: content
-  field_order_threshold:
-    type: number_integer
+  field_size:
+    type: string
     label: above
     settings:
-      thousand_separator: ''
-      prefix_suffix: true
+      link_to_entity: false
     third_party_settings: {  }
-    weight: 104
+    weight: 5
+    region: content
+  field_weight:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_width:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 8
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 0
     region: content
 hidden: {  }

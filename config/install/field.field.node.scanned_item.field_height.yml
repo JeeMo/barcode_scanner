@@ -1,15 +1,15 @@
-uuid: 9696a66d-b37a-474f-b789-978883e5049a
+uuid: 357e850a-40e3-41c4-9490-72ca5b4e8f05
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_barcode
+    - field.storage.node.field_height
     - node.type.scanned_item
-id: node.scanned_item.field_barcode
-field_name: field_barcode
+id: node.scanned_item.field_height
+field_name: field_height
 entity_type: node
 bundle: scanned_item
-label: Barcode
+label: Height
 description: ''
 required: false
 translatable: false

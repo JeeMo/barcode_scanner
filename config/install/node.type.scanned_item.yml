@@ -1,4 +1,4 @@
-uuid: ee39276d-94d6-4b43-998d-b68efad887c7
+uuid: 41dfd7ba-392d-46f0-80f6-23f95e00d0e1
 langcode: en
 status: true
 dependencies:
@@ -10,8 +10,8 @@ third_party_settings:
     parent: ''
 name: 'Scanned Item'
 type: scanned_item
-description: ''
+description: 'Scanned Items for the Barcode Scanner module.'
 help: ''
 new_revision: true
-preview_mode: 1
-display_submitted: true
+preview_mode: 0
+display_submitted: false

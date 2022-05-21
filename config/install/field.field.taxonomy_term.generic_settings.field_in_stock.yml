@@ -1,0 +1,25 @@
+uuid: 0fd88ebb-b94d-443b-9bcc-557d50fd421c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_in_stock
+    - taxonomy.vocabulary.generic_settings
+id: taxonomy_term.generic_settings.field_in_stock
+field_name: field_in_stock
+entity_type: taxonomy_term
+bundle: generic_settings
+label: 'In Stock'
+description: 'I have this many currently in stock.'
+required: true
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

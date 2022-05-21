@@ -1,0 +1,29 @@
+uuid: 7a6962b3-6117-48fe-ad88-2faa4f46042e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_generic_product
+    - node.type.scanned_item
+    - taxonomy.vocabulary.generic_settings
+id: node.scanned_item.field_generic_product
+field_name: field_generic_product
+entity_type: node
+bundle: scanned_item
+label: 'Generic Product'
+description: 'Can''t find the right generic product? <a href="admin/structure/taxonomy/manage/generic_settings/add">Create a new Generic Product for this item</a>'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      generic_settings: generic_settings
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

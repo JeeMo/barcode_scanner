@@ -1,0 +1,10 @@
+uuid: aca44a86-07f4-41ca-8cd3-0b3f85a18bae
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.stock_values
+label: 'Stock Values'
+targetEntityType: taxonomy_term
+cache: true
