@@ -1,0 +1,12 @@
+# Schema for the configuration files of the BarcodeScanner module.
+
+barcode_scanner.settings:
+  type: config_object
+  label: 'Barcode Scanner Settings'
+  mapping:
+    barcodelookup_api_key:
+      type: text
+      label: 'API Key provided by BarcodeLookup.com.'
+    barcodelookup_api_url:
+      type: text
+      label: 'API URL for use with BarcodeLookup.com'

@@ -3,12 +3,10 @@ type: module
 description: 'Barcode Scanner integrated with barcodelookup.com.'
 core_version_requirement: ^8.8.0 || ^9 || ^10
 package: 'Custom'
+configure: barcode_scanner.settings
 dependencies:
-  - drupal:admin_toolbar
-  - drupal:admin_toolbar_links_access_filter
-  - drupal:admin_toolbar_search
-  - drupal:admin_toolbar_tools
   - drupal:taxonomy
-  - drupal:views_autocomplete_filters
-  - drupal:views
-
+  - drupal:image
+  - drupal:path
+  - drupal:menu_ui
+  - drupal:field_ui

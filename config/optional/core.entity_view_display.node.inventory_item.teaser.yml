@@ -1,0 +1,40 @@
+uuid: 81c22390-3772-425e-8df8-e79360b2d431
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.inventory_item.body
+    - field.field.node.inventory_item.field_barcode
+    - field.field.node.inventory_item.field_minimum_quantity
+    - field.field.node.inventory_item.field_quantity
+    - node.type.inventory_item
+  module:
+    - text
+    - user
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+id: node.inventory_item.teaser
+targetEntityType: node
+bundle: inventory_item
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_barcode: true
+  field_minimum_quantity: true
+  field_quantity: true

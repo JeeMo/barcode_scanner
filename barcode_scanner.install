@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Sets up BarcodeScanner.
+ */
+
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Pre-populate Taxonomies.
+ */
+function barcode_scanner_update_10001() {
+  $terms = [
+    'generic_items' => [
+      'toilet paper',
+      'laundry detergent',
+    ],
+    'stock_units' => [
+      'cans',
+      'lbs',
+    ],
+  ];
+  foreach ($terms as $taxonomy => $terms) {
+    // create and save terms
+    foreach ($terms as $new_term) {
+      $term = Term::create([
+        'vid' => $taxonomy,
+        'name' => $new_term,
+      ]);
+      $term->save();
+    }
+  }
+}

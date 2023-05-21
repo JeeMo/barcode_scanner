@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+name: 'Barcode Scanner: Stock Units'
+vid: stock_units
+description: 'Choices for stock units'
+weight: 0

@@ -1,0 +1,30 @@
+uuid: f055f55c-22f5-4ff1-9998-a2ce074d30b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_minimum_quantity
+    - node.type.inventory_item
+  module:
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+id: node.inventory_item.field_minimum_quantity
+field_name: field_minimum_quantity
+entity_type: node
+bundle: inventory_item
+label: 'Minimum Quantity'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

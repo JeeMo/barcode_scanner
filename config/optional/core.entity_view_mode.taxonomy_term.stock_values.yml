@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+id: taxonomy_term.stock_values
+label: 'Stock Values'
+targetEntityType: taxonomy_term
+cache: true

@@ -1,0 +1,53 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.generic_settings.field_in_stock
+    - field.field.taxonomy_term.generic_settings.field_order_threshold
+    - field.field.taxonomy_term.generic_settings.field_units_of_stock
+    - taxonomy.vocabulary.generic_settings
+  module:
+    - text
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+id: taxonomy_term.generic_settings.default
+targetEntityType: taxonomy_term
+bundle: generic_settings
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_in_stock:
+    type: number_integer
+    label: inline
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_order_threshold:
+    type: number_integer
+    label: inline
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_units_of_stock:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden: {  }

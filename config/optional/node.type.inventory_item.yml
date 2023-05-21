@@ -1,0 +1,21 @@
+uuid: b1ed20f5-b989-4d69-916c-018e6f5439e1
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Barcode Scanner: Inventory Item'
+type: inventory_item
+description: 'An item in your inventory'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

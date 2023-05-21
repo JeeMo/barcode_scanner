@@ -1,0 +1,55 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.scanned_item.body
+    - field.field.node.scanned_item.field_barcode
+    - field.field.node.scanned_item.field_brand
+    - field.field.node.scanned_item.field_category
+    - field.field.node.scanned_item.field_generic_product
+    - field.field.node.scanned_item.field_height
+    - field.field.node.scanned_item.field_length
+    - field.field.node.scanned_item.field_product_image
+    - field.field.node.scanned_item.field_quantity_in_stock
+    - field.field.node.scanned_item.field_size
+    - field.field.node.scanned_item.field_weight
+    - field.field.node.scanned_item.field_width
+    - node.type.scanned_item
+  module:
+    - text
+    - user
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+id: node.scanned_item.teaser
+targetEntityType: node
+bundle: scanned_item
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_barcode: true
+  field_brand: true
+  field_category: true
+  field_generic_product: true
+  field_height: true
+  field_length: true
+  field_product_image: true
+  field_quantity_in_stock: true
+  field_size: true
+  field_weight: true
+  field_width: true

@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - barcode_scanner
+  enforced:
+    module:
+      - barcode_scanner
+name: 'Barcode Scanner: Generic Settings'
+vid: generic_settings
+description: 'Stock threshold settings'
+weight: 0
