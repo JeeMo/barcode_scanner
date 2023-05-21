@@ -39,8 +39,11 @@ This is a Drupal module compatible with D8+.
 
 Normally, I would recommend using Composer to download a module but this module is not published on Drupal or Packagist.  You could set up Composer to pull from my repo directly or just manually download it and extract to web/modules/.
 
-* Go to admin/modules. 
+* Go to /admin/modules. 
 * Filter for 'barcode'.
 * Check the box and click 'Install'.
+* Go to /admin/config/system/barcode_scanner
+  * Save your API key and url.
+  * You can skip the free trial and enter random info here.  The code should handle it gracefully.
 * Return to the home page and click the 'Barcode Scanner' link in the main navigation.
 * Enter a barcode and submit.
