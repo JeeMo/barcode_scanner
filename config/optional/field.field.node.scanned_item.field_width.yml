@@ -1,14 +1,15 @@
+uuid: 80f2787b-fa51-436a-a750-c30d2950f86b
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_width
     - node.type.scanned_item
-  module:
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
+_core:
+  default_config_hash: 6msc815OtGLv3PRsnOm7DdVCUz6o0muAZjkgRm3PpUU
 id: node.scanned_item.field_width
 field_name: field_width
 entity_type: node

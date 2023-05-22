@@ -1,13 +1,14 @@
+uuid: e2f7bcf3-fa93-4457-ac2e-0de9a5b8a72b
 langcode: en
 status: true
 dependencies:
   config:
     - node.type.scanned_item
-  module:
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
+_core:
+  default_config_hash: EFfbow7c0mi4uITLVkjNoXe8Hm-mhSeOip8x7T1jRNs
 id: node.scanned_item.promote
 field_name: promote
 entity_type: node

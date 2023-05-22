@@ -1,3 +1,4 @@
+uuid: 6fe0218b-ee35-42e4-aab7-d537ab38b4fe
 langcode: en
 status: true
 dependencies:
@@ -9,6 +10,7 @@ dependencies:
     - field.field.node.scanned_item.field_generic_product
     - field.field.node.scanned_item.field_height
     - field.field.node.scanned_item.field_length
+    - field.field.node.scanned_item.field_minimum_quantity
     - field.field.node.scanned_item.field_product_image
     - field.field.node.scanned_item.field_quantity_in_stock
     - field.field.node.scanned_item.field_size
@@ -19,10 +21,11 @@ dependencies:
   module:
     - image
     - text
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
+_core:
+  default_config_hash: vpJmO3_WYzLHDmPYb4582HMj64HCU84-gsvZGOrO0WU
 id: node.scanned_item.default
 targetEntityType: node
 bundle: scanned_item
@@ -88,6 +91,13 @@ content:
     region: content
     settings:
       size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_minimum_quantity:
+    type: number
+    weight: 26
+    region: content
+    settings:
       placeholder: ''
     third_party_settings: {  }
   field_product_image:

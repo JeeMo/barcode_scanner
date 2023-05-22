@@ -1,12 +1,14 @@
+uuid: 103a8726-b29e-4778-823c-a8baf754e618
 langcode: en
 status: true
 dependencies:
   module:
     - node
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
+_core:
+  default_config_hash: RsFMZ5ctNecR0UGJwFD-qcg7yvptasNvyubQ_GH0KwQ
 id: node.field_quantity_in_stock
 field_name: field_quantity_in_stock
 entity_type: node

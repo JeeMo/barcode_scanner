@@ -1,9 +1,9 @@
+uuid: 8a9f6f44-3483-4a2b-99b0-a5d20ac6e591
 langcode: en
 status: true
 dependencies:
   module:
     - menu_ui
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
@@ -11,6 +11,8 @@ third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+_core:
+  default_config_hash: 0f9hcucflCDmQNxhyHvYe_mKa0bT-lJECq7141cTZw4
 name: 'Barcode Scanner: Scanned Item'
 type: scanned_item
 description: 'Scanned Items for the Barcode Scanner module.'

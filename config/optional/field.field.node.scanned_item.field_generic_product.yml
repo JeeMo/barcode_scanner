@@ -1,3 +1,4 @@
+uuid: bb75e9da-cf91-4d43-b4b1-6516d52a0a1f
 langcode: en
 status: true
 dependencies:
@@ -5,11 +6,11 @@ dependencies:
     - field.storage.node.field_generic_product
     - node.type.scanned_item
     - taxonomy.vocabulary.generic_settings
-  module:
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
+_core:
+  default_config_hash: 7KlJ1L7YgGNNFBcnjGj9CPpvV0gh5B_davYPLZM-wrM
 id: node.scanned_item.field_generic_product
 field_name: field_generic_product
 entity_type: node

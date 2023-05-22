@@ -130,8 +130,6 @@ class BarcodeFinder {
 
           // Save the new scanned_item.
           if ($node->save()) {
-            // TODO: Need to create and save in inventory_item to track quantities here (entity_reference?).
-
             // Return the edit URL for new scanned_item so the form can redirect to it.
             $url = Url::fromRoute('entity.node.edit_form', ['node' => $node->id()]);
           }

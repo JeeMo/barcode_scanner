@@ -39,7 +39,8 @@ class BarcodeScannerTest extends BrowserTestBase {
     parent::setUp();
     $this->user = $this->drupalCreateUser(
           [
-            'administer nodes',
+            'create scanned_item content',
+            'administer taxonomy'
           ]
       );
   }
@@ -61,11 +62,10 @@ class BarcodeScannerTest extends BrowserTestBase {
 
     $expected_content_types = [
       'scanned_item',
-      'inventory_item',
     ];
     foreach ($expected_content_types as $type) {
       // Generator test:
-      $this->drupalGet('node/add/' . $type);
+      $this->drupalGet('/node/add/' . $type);
       $this->assertSession()->statusCodeEquals(200);
     }
 
@@ -102,29 +102,35 @@ class BarcodeScannerTest extends BrowserTestBase {
       );
 
     // Test form validation of %barcode.
-    $this->drupalPostForm(
-          NULL, [
+    $this->submitForm(
+          [
             'barcodelookup_api_key' => 'Abcc1233',
             'barcodelookup_api_url' => 'https://api.barcodelookup.com/v3/products?barcode=&formatted=y&key=%api_key',
-          ], t('Save configuration')
+          ],
+          t('Save configuration'),
+          'barcode-scanner-settings'
       );
     $this->assertSession()->pageTextContains("Token '%barcode' should be used once.");
 
     // Test form validation of %api_key.
-    $this->drupalPostForm(
-          NULL, [
-            'barcodelookup_api_key' => 'Abcc1233',
-            'barcodelookup_api_url' => 'https://api.barcodelookup.com/v3/products?barcode=%barcode&formatted=y&key=',
-          ], t('Save configuration')
+    $this->submitForm(
+      [
+        'barcodelookup_api_key' => 'Abcc1233',
+        'barcodelookup_api_url' => 'https://api.barcodelookup.com/v3/products?barcode=%barcode&formatted=y&key=',
+      ],
+      t('Save configuration'),
+      'barcode-scanner-settings'
       );
     $this->assertSession()->pageTextContains("Token '%api_key' should be used once.");
 
     // Test form submission.
-    $this->drupalPostForm(
-          NULL, [
-            'barcodelookup_api_key' => 'Abcc1233',
-            'barcodelookup_api_url' => 'https://api.barcodelookup.com/v3/products?barcode=%barcode&formatted=y&key=%api_key',
-          ], t('Save configuration')
+    $this->submitForm(
+      [
+        'barcodelookup_api_key' => 'Abcc1233',
+        'barcodelookup_api_url' => 'https://api.barcodelookup.com/v3/products?barcode=%barcode&formatted=y&key=%api_key',
+      ],
+      t('Save configuration'),
+      'barcode-scanner-settings'
       );
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 
@@ -141,11 +147,13 @@ class BarcodeScannerTest extends BrowserTestBase {
       );
 
     // Can you unset them if you no longer want to use the API?
-    $this->drupalPostForm(
-      NULL, [
+    $this->submitForm(
+      [
         'barcodelookup_api_key' => '',
         'barcodelookup_api_url' => '',
-      ], t('Save configuration')
+      ],
+      t('Save configuration'),
+      'barcode-scanner-settings'
     );
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
 

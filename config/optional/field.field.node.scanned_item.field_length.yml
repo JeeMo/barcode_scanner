@@ -1,14 +1,15 @@
+uuid: 953f7565-a506-485a-a1f7-1ae2ae5404bd
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_length
     - node.type.scanned_item
-  module:
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
+_core:
+  default_config_hash: AQb73ihJjShUAYgB7uoikgpb_d3FEA0_dMzrlrd1trk
 id: node.scanned_item.field_length
 field_name: field_length
 entity_type: node

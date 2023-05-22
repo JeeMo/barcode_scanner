@@ -1,14 +1,15 @@
+uuid: 539973e6-de88-4b1e-b1d5-95ef50590a75
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_quantity_in_stock
     - node.type.scanned_item
-  module:
-    - barcode_scanner
   enforced:
     module:
       - barcode_scanner
+_core:
+  default_config_hash: kjHB7_sQnKtOVtEsJYfb3IOO_VUruoQtMZtXMfIK1Rs
 id: node.scanned_item.field_quantity_in_stock
 field_name: field_quantity_in_stock
 entity_type: node
