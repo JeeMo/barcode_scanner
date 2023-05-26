@@ -16,7 +16,7 @@ field_name: field_generic_product
 entity_type: node
 bundle: scanned_item
 label: 'Generic Product'
-description: 'Can''t find the right generic product? <a href="admin/structure/taxonomy/manage/generic_settings/add">Create a new Generic Product for this item</a>'
+description: 'Can''t find the right generic product? <a href="/admin/structure/taxonomy/manage/generic_settings/add">Create a new Generic Product for this item</a>'
 required: true
 translatable: false
 default_value: {  }

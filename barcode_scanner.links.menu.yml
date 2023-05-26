@@ -7,7 +7,8 @@ barcode_scanner.lookup_form:
   menu_name: 'main'
   weight: 1
 barcode_scanner.settings:
-  title: Barcode Scanner Config Settings
-  description: Configure Barcode Scanner
+  title: Barcode Scanner API Settings
+  description: Configure Barcode Scanner API settings for barcodelookup.com.
   route_name: barcode_scanner.settings
+  menu_name: 'main'
   weight: 2

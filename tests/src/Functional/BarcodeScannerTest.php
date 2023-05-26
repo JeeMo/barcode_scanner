@@ -81,6 +81,36 @@ class BarcodeScannerTest extends BrowserTestBase {
   }
 
   /**
+   * Test the Lookup Form.
+   */
+  public function testLookupForm() {
+    // Login.
+    $this->drupalLogin($this->user);
+
+    // Access Lookup Form page.
+    $this->drupalGet('scan');
+    $this->assertSession()->statusCodeEquals(200);
+
+    // Test the Lookup form elements exist and have defaults.
+    $this->assertSession()->fieldValueEquals(
+      'action',
+      'No Change',
+    );
+
+    // Test that BarcodeFinder returns expected output for new barcode.
+    $this->submitForm(
+      [
+        'action' => 'Add',
+        'barcode' => '13',
+      ],
+      t('Submit'),
+      'barcode_scanner_lookup_form'
+    );
+    $this->assertSession()->pageTextContains("Existing product not found locally or via API: Let's create a new one!");
+
+  }
+
+  /**
    * Tests the API config form.
    */
   public function testConfigForm() {

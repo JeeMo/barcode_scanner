@@ -11,6 +11,15 @@ use Drupal\barcode_scanner\BarcodeFinder;
  */
 class BarcodeScannerLookupForm extends FormBase {
 
+  private $config;
+
+  /**
+   * @inheritdoc
+   */
+  public function __construct() {
+    $this->config = $this->configFactory()->getEditable('barcode_scanner.settings');
+  }
+
   /**
    * @inheritdoc
    */
@@ -22,6 +31,20 @@ class BarcodeScannerLookupForm extends FormBase {
    * @inheritdoc
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    //Track the user's preferred action for this form.
+    $action = $this->config->get('barcode_scanner_action') ?? 'No Change';
+
+    $form['action'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Add or Subtract?'),
+      '#options' => [
+        'No Change' => 'No Change',
+        'Add' => 'Add',
+        'Subtract' => 'Subtract'
+      ],
+      '#default_value' => $action,
+    ];
+
     $form['barcode'] = [
       '#type' => 'number',
       '#title' => $this->t('Barcode'),
@@ -31,8 +54,8 @@ class BarcodeScannerLookupForm extends FormBase {
       '#weight' => '0',
       '#min' => 1,
       '#step' => 1,
-
     ];
+
     $form['submit'] = [
       '#type' => 'submit',
       '#title' => $this->t('Look Up'),
@@ -50,7 +73,7 @@ class BarcodeScannerLookupForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $finder = new BarcodeFinder();
-    $url = $finder->get($form_state->getValue('barcode'));
+    $url = $finder->get($form_state->getValue('barcode'), $form_state->getValue('action'));
     return $form_state->setRedirectUrl($url);
   }
 

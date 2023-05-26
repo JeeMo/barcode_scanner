@@ -17,7 +17,7 @@ use Drupal\Core\File\FileSystemInterface;
  *     - Return edit URL to new entity.
  *   - **If not found** Return add URL for scanned_item for manual entry.
  */
-class BarcodeFinder {
+class BarcodeFinder{
 
   /**
    * Taxonmy machine_name for product categories returned by API.
@@ -25,17 +25,31 @@ class BarcodeFinder {
   private const VID = 'product_categories';
 
   /**
+   * @var $config
+   */
+  private $config;
+
+  /**
+   * @inheritdoc
+   */
+  public function __construct() {
+    $this->config = \Drupal::service('config.factory')->getEditable('barcode_scanner.settings');
+  }
+
+  /**
    * Search logic for barcode's scanned_item.
    *
    * @param string $barcode
    *   Submitted barcode string from Lookup Form.
+   * @param string $action
+   *   Submitted action string from Lookup Form.
    *
    * @return bool|\Drupal\Core\Url|string
    *   The URL for the scanned_item entity.
    */
-  public function get($barcode) {
+  public function get($barcode, $action) {
     // Check for barcode in content.
-    if (!($url = $this->find_from_db($barcode))) {
+    if (!($url = $this->find_from_db($barcode, $action))) {
       if (!($url = $this->find_from_barcodelookup($barcode))) {
         $url = $this->create_new($barcode);
       }
@@ -51,21 +65,20 @@ class BarcodeFinder {
    * but the API is so simple at this stage that I didn't bother.
    * I can always come back and do that if needed.
    *
-   * @param $barcode
+   * @param string $barcode
    *   Submitted barcode.
    *
    * @return bool|\Drupal\Core\Url|string
    *   The URL for the scanned_item entity.
    */
-  private function find_from_barcodelookup($barcode) {
+  private function find_from_barcodelookup(string $barcode) {
     // Let the user know what is happening.
     $str = "Searching API.";
     \Drupal::messenger()->addMessage($str);
 
     // Load the API configuration.
-    $config = \Drupal::service('config.factory')->getEditable('barcode_scanner.settings');
-    $api_key = $config->get('barcodelookup_api_key');
-    $api_url = $config->get('barcodelookup_api_url');
+    $api_key = $this->config->get('barcodelookup_api_key');
+    $api_url = $this->config->get('barcodelookup_api_url');
 
     // Has the API config been completed?
     if ($api_key && $api_url) {
@@ -78,12 +91,20 @@ class BarcodeFinder {
 
       // Use only one cURL connection for multiple queries
       $ch = curl_init();
-
-      curl_setopt($ch, CURLOPT_URL, $api_url);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+//curl --include --header 'Accept: application/json' 'https://api.barcodelookup.com/v3/products?barcode=3614272049529&key=your_api_key'
+      curl_setopt_array($ch, [
+        CURLOPT_URL => $api_url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_HEADER => true,
+      ]
+      );
       $data = curl_exec($ch);
+
+      $info = curl_getinfo($ch);
+      $str = "Headers: " . print_r($info, TRUE);
+      \Drupal::messenger()->addMessage($str);
       curl_close($ch);
 
       // Was the API reachable?
@@ -158,14 +179,12 @@ class BarcodeFinder {
    * @return \Drupal\Core\Url
    *   Return add URL for scanned_item.
    */
-  private function create_new($barcode) {
+  private function create_new(string $barcode) {
     // Let the user know what is happening.
     $str = "Existing product not found locally or via API: Let's create a new one!";
     \Drupal::messenger()->addMessage($str);
 
     // Build the add new scanned_item url.
-
-    // TODO: Need to create and save in inventory_item to track quantities here (entity_reference?).
     $url = Url::fromRoute('node.add', ['node_type' => 'scanned_item']);
     return $url;
   }
@@ -175,6 +194,8 @@ class BarcodeFinder {
    *
    * @param string $barcode
    *   Submitted barcode.
+   * @param string $action
+   *   Submitted action.
    *
    * @return \Drupal\Core\Url|false
    *   Edit URL for scanned_item with this barcode or false.
@@ -182,7 +203,12 @@ class BarcodeFinder {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  private function find_from_db($barcode) {
+  private function find_from_db(string $barcode, string $action) {
+    // Save selected action for next use.
+    $this->config
+      ->set('barcode_scanner_action', $action)
+      ->save();
+
     // If you aren't over-communicating, you are under-communicating.
     $str = "Searching for barcode in local system.";
     \Drupal::messenger()->addMessage($str);
@@ -202,10 +228,23 @@ class BarcodeFinder {
       );
 
     // If found, display for editing and modifying inventory.
-    // TODO: Make lookup form smart enough to know if being added/subtracted to simply UI?
     if ($entities) {
-      $entity = array_shift($entities);
+      $str = "Barcode Located.";
+      \Drupal::messenger()->addMessage($str);
 
+      $entity = array_shift($entities);
+      if ($action !== 'No Change') {
+        // Add/Subtract from inventory.
+        $qty = $entity->field_quantity_in_stock->value;
+        $qty = ($action == 'Add') ? $qty+1 : $qty-1;
+        $entity->field_quantity_in_stock->value = $qty;
+        $entity->save();
+        $str = "Quantity Updated.";
+        \Drupal::messenger()->addMessage($str);
+
+        $url = Url::fromRoute('barcode_scanner.lookup_form', []);
+        return $url;
+      }
       // Setup edit URL and return.
       $url = Url::fromRoute('entity.node.edit_form', ['node' => $entity->id()]);
       return $url;
@@ -221,7 +260,7 @@ class BarcodeFinder {
    *
    * @return string|null
    */
-  private function _get_image_ext($str) {
+  private function _get_image_ext(string $str): string {
     $tokens = explode("/", $str);
     $filename = array_pop($tokens);
     $tokens = explode(".", $filename);
@@ -240,7 +279,7 @@ class BarcodeFinder {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  private function _save_categories($categories) {
+  private function _save_categories(string $categories): string {
     $tokens = explode(' > ', $categories);
     $parent = NULL;
     foreach ($tokens as $tag) {

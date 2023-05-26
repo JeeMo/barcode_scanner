@@ -38,11 +38,13 @@ Lando is great for local dev: https://docs.lando.dev/getting-started/
 
 Normally, I would recommend using Composer to download a module but this module is not published on Drupal or Packagist.  You could set up Composer to pull from my repo directly or just manually download it and extract to web/modules/.
 
-You will need to go to admin/modules.
-Filter for 'barcode'.
-Check the box and click 'Install'.
-Return to the home page and click the 'Barcode Scanner' link in the main navigation.
-Enter a barcode and submit.
+* You will need to go to admin/modules.
+* Filter for 'barcode'.
+* Check the box and click 'Install'.
+* If you have an API Key, return to the home page and click the 'Barcode Scanner API Settings' link in the main navigation.
+  * Save your settings there.
+* Return to the home page and click the 'Barcode Scanner' link in the main navigation.
+* Enter a barcode and submit.
 
 ### Basic Testing
 `lando test web/modules/barcode_scanner/`

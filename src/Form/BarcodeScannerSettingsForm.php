@@ -13,10 +13,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class BarcodeScannerSettingsForm extends ConfigFormBase {
 
   /**
+   * @var $config
+   */
+  private $config;
+
+  /**
    * @inheritdoc
    */
   public function __construct(ConfigFactoryInterface $config_factory) {
     parent::__construct($config_factory);
+    $this->config = $config_factory->getEditable('barcode_scanner.settings');
   }
 
   /**
@@ -48,18 +54,17 @@ class BarcodeScannerSettingsForm extends ConfigFormBase {
    * @inheritdoc
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('barcode_scanner.settings');
     $form['barcodelookup_api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Barcode Lookup API Key'),
       '#description' => $this->t('This requires a paid subscription to barcodelookup.com.'),
-      '#default_value' => $config->get('barcodelookup_api_key'),
+      '#default_value' => $this->config->get('barcodelookup_api_key'),
     ];
     $form['barcodelookup_api_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Barcode Lookup API URL'),
       '#description' => $this->t('Please replace the api_key in the url with "%api_key" and replace the barcode value with "%barcode".'),
-      '#default_value' => $config->get('barcodelookup_api_url'),
+      '#default_value' => $this->config->get('barcodelookup_api_url'),
     ];
     return parent::buildForm($form, $form_state);
   }
