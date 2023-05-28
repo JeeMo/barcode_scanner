@@ -17,7 +17,7 @@ use Drupal\Core\File\FileSystemInterface;
  *     - Return edit URL to new entity.
  *   - **If not found** Return add URL for scanned_item for manual entry.
  */
-class BarcodeFinder{
+class BarcodeFinder {
 
     /**
      * Taxonmy machine_name for product categories returned by API.
@@ -95,106 +95,72 @@ class BarcodeFinder{
         // Has the API config been completed?
         if ($api_key && $api_url) {
 
-            //$api_key = 'ENTER YOUR API KEY HERE';
-            $url = 'https://api.barcodelookup.com/v3/products?barcode=077341125112&formatted=y&key=' . $api_key;
+            // $api_key = 'ENTER YOUR API KEY HERE';
+            // $url = 'https://api.barcodelookup.com/v3/products?barcode=' . $barcode . '&formatted=y&key=' . $api_key;
+            $url = str_replace(['%api_key', '%barcode'], [$api_key, $barcode], $api_url);
 
             $ch = curl_init();
 
             $data = $this->get_data($url, $ch);
 
-            $response = array();
-            $response = json_decode($data);
-
-            $str = '<strong>Barcode Number:</strong> ' . $response->products[0]->barcode_number . '<br><br>';
-
-            $str .= '<strong>Title:</strong> ' . $response->products[0]->title . '<br><br>';
-
-            $str .= '<strong>Entire Response:</strong><pre>';
-            $str .= print_r($response, TRUE);
-            $str .= '</pre>';
-
-            \Drupal::messenger()->addMessage($str);
-            /*
             // Notify user that the barcode doesn't exist locally.
             $str = "Not found in local system, checking API.";
             \Drupal::messenger()->addMessage($str);
 
-            // Prep the API url with the submitted barcode.
-            //$api_url = str_replace(['%api_key', '%barcode'], [$api_key, $barcode], $api_url);
-            $api_url = "https://api.barcodelookup.com/v3/products?barcode=9780140157376&formatted=y&key=dioqrp8uxkc4scvz1n1isb4ixlp59c";
-
-            // Use only one cURL connection for multiple queries
-            $ch = curl_init();
-      //curl --include --header 'Accept: application/json' 'https://api.barcodelookup.com/v3/products?barcode=3614272049529&key=your_api_key'
-            curl_setopt_array($ch, [
-              CURLOPT_URL => $api_url,
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_SSL_VERIFYPEER => false,
-              CURLOPT_SSL_VERIFYHOST => false,
-              CURLOPT_HEADER => true,
-            ]
-            );
-            $data = curl_exec($ch);
-
-            $info = curl_getinfo($ch);
-            $str = "Headers: " . print_r($info, TRUE);
-            \Drupal::messenger()->addMessage($str);
-            curl_close($ch);
-
             // Was the API reachable?
             if ($data) {
-              // Decode the cURL response.
-              $response = json_decode($data);
+                // Decode the cURL response.
+                $response = [];
+                $response = json_decode($data);
 
-              // Was the barcode located and the product returned?
-              if (($response) && (isset($response->products[0]))) {
-                // Default to the first result.
-                $product = $response->products[0];
+                // Was the barcode located and the product returned?
+                if (($response) && (isset($response->products[0]))) {
+                    // Default to the first result.
+                    $product = $response->products[0];
 
-                // Save any returned CATEGORIES to the static::VID taxonomy.
-                $category = $this->_save_categories($product->category);
+                    // Save any returned CATEGORIES to the static::VID taxonomy.
+                    $category = $this->_save_categories($product->category);
 
-                // Prep and save product IMAGES
-                $ext = $this->_get_image_ext($product->images[0]);
-                $data = file_get_contents($product->images[0]);
-                $fileRepository = \Drupal::service('file.repository');
-                $file = $fileRepository->writeData($data, 'public://' . $barcode . '.' . $ext, FileSystemInterface::EXISTS_REPLACE);
+                    // Prep and save product IMAGES
+                    $ext = $this->_get_image_ext($product->images[0]);
+                    $data = file_get_contents($product->images[0]);
+                    $fileRepository = \Drupal::service('file.repository');
+                    $file = $fileRepository->writeData($data, 'public://' . $barcode . '.' . $ext, FileSystemInterface::EXISTS_REPLACE);
 
-                // Setup the new scanned_item.
-                $node = \Drupal::entityTypeManager()->getStorage('node')->create(
-                      [
-                        'type' => 'scanned_item',
-                        'title' => $product->title,
-                        'field_barcode' => $product->barcode_number,
-                        'body' => $product->description,
-                        'field_size' => $product->size,
-                        'field_weight' => $product->weight,
-                        'field_length' => $product->length,
-                        'field_height' => $product->height,
-                        'field_width' => $product->width,
-                        'field_brand' => $product->brand,
-                        'field_category' => $category,
-                        'field_product_image' => [
-                          'target_id' => $file->id(),
-                          'alt' => $product->description,
-                          'title' => $product->brand,
-                        ],
+                    // Setup the new scanned_item.
+                    $node = \Drupal::entityTypeManager()->getStorage('node')->create(
+                        [
+                            'type' => 'scanned_item',
+                            'title' => $product->title,
+                            'field_barcode' => $product->barcode_number,
+                            'body' => $product->description,
+                            'field_size' => $product->size,
+                            'field_weight' => $product->weight,
+                            'field_length' => $product->length,
+                            'field_height' => $product->height,
+                            'field_width' => $product->width,
+                            'field_brand' => $product->brand,
+                            'field_category' => $category,
+                            'field_product_image' => [
+                                'target_id' => $file->id(),
+                                'alt' => $product->description,
+                                'title' => $product->brand,
+                            ],
 
-                      ]
-                  );
+                        ]
+                    );
 
-                // Save the new scanned_item.
-                if ($node->save()) {
-                  // Return the edit URL for new scanned_item so the form can redirect to it.
-                  $url = Url::fromRoute('entity.node.edit_form', ['node' => $node->id()]);
+                    // Save the new scanned_item.
+                    if ($node->save()) {
+                        // Return the edit URL for new scanned_item so the form can redirect to it.
+                        $url = Url::fromRoute('entity.node.edit_form', ['node' => $node->id()]);
+                    }
                 }
-              }
-              return $url;
+                return $url;
             }
             // Communicate possible problem with the API to the user.
             $str = "No results from the API:  Is your subscription @ barcodelookup.com active?";
             \Drupal::messenger()->addMessage($str);
-            */
         }
         else {
             // Let the user know they need to set up the API.
@@ -271,7 +237,7 @@ class BarcodeFinder{
             if ($action !== 'No Change') {
                 // Add/Subtract from inventory.
                 $qty = $entity->field_quantity_in_stock->value;
-                $qty = ($action == 'Add') ? $qty+1 : $qty-1;
+                $qty = ($action == 'Add') ? $qty + 1 : $qty - 1;
                 $entity->field_quantity_in_stock->value = $qty;
                 $entity->save();
                 $str = "Quantity Updated.";
@@ -314,7 +280,7 @@ class BarcodeFinder{
      * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
      * @throws \Drupal\Core\Entity\EntityStorageException
      */
-    private function _save_categories(string $categories): string {
+    private function _save_categories(string $categories): mixed {
         $tokens = explode(' > ', $categories);
         $parent = NULL;
         foreach ($tokens as $tag) {
