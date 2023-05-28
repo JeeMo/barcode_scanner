@@ -115,6 +115,10 @@ class BarcodeFinder {
 
                 // Was the barcode located and the product returned?
                 if (($response) && (isset($response->products[0]))) {
+                    // WOOT!  API returned data!!
+                    $str = "API returned a product.  We'll save it to a node and let you edit it.";
+                    \Drupal::messenger()->addMessage($str);
+
                     // Default to the first result.
                     $product = $response->products[0];
 
