@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Generic Settings'
-vid: generic_settings
-description: 'Barcode Scanner: stock threshold settings'
-weight: 0

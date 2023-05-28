@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Stock Units'
-vid: stock_units
-description: 'Choices for stock units'
-weight: 0

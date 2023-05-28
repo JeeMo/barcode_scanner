@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Product Categories'
-vid: product_categories
-description: 'Group scanned items into categories.'
-weight: 0
